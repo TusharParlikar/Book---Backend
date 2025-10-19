@@ -4,7 +4,7 @@
 
 **Author's Email:** tparlikar497@gmail.com
 
-**Repository:** [https://github.com/TusharParlikar/Book---Backend.git](https://github.com/TusharParlikar/Book---Backend.git)
+**Repository:** [https://github.com/TusharParlikar/Book---Backend](https://github.com/TusharParlikar/Book---Backend)
 
 ---
 
