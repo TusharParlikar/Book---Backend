@@ -211,3 +211,11 @@ module.exports = Post;
 ---
 
 ## 🎯 Next: Chapter 11 - Advanced Data Modeling
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 9: Data Modeling Fundamentals](./09_DATA_MODELING_FUNDAMENTALS.md) | [📖 Course Index](../README.md) | [Chapter 11: Advanced E-commerce Models →](./11_ADVANCED_ECOMMERCE_MODELS.md) |

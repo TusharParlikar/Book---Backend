@@ -81,3 +81,11 @@ userSchema.methods.hidePassword = function() {
 ---
 
 ## 🎯 Next: Chapter 14 - Professional Project Setup
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 12: Hospital System Models](./12_HOSPITAL_MODELS.md) | [📖 Course Index](../README.md) | [Chapter 14: Professional Project Setup →](./14_PROFESSIONAL_PROJECT_SETUP.md) |

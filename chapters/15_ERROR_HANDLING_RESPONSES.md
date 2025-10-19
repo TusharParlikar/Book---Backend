@@ -137,3 +137,11 @@ app.use(errorHandler);
 ---
 
 ## 🎯 Next: Chapter 16 - HTTP Fundamentals
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 14: Professional Project Setup](./14_PROFESSIONAL_PROJECT_SETUP.md) | [📖 Course Index](../README.md) | [Chapter 16: HTTP Fundamentals →](./16_HTTP_FUNDAMENTALS.md) |

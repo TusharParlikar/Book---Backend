@@ -202,3 +202,11 @@ You've completed a comprehensive backend development course!
 ## 🚀 Your Backend Journey Begins Now!
 
 Happy coding! 🎊
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 26: Watch History](./26_WATCH_HISTORY.md) | [📖 Course Index](../README.md) | — |

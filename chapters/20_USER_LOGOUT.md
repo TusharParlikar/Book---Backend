@@ -55,3 +55,11 @@ export function useLogout() {
 ---
 
 ## 🎯 Next: Chapter 21 - JWT Verification Middleware
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 19: User Login](./19_USER_LOGIN.md) | [📖 Course Index](../README.md) | [Chapter 21: JWT Verification →](./21_JWT_VERIFICATION.md) |

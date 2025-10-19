@@ -725,3 +725,11 @@ exports.getUser = async (req, res) => {
 ## 🎯 Next Steps
 
 Now you understand real-world scenarios. Next: **Chapter 7: Project Setup and Deployment** - setting up your first professional project!
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 5: Directory Structure](./05_STANDARD_DIRECTORY_STRUCTURE.md) | [📖 Course Index](../README.md) | [Chapter 7: Project Setup & Deployment →](./07_PROJECT_SETUP_DEPLOYMENT.md) |

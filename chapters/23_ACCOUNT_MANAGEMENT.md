@@ -64,3 +64,11 @@ exports.updateAvatar = asyncHandler(async (req, res) => {
 ---
 
 ## 🎯 Next: Chapter 24 - MongoDB Aggregation
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 22: Token Refresh](./22_TOKEN_REFRESH.md) | [📖 Course Index](../README.md) | [Chapter 24: Aggregation Pipelines →](./24_AGGREGATION_PIPELINES.md) |

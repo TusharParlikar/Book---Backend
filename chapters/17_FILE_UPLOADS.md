@@ -93,3 +93,11 @@ module.exports = uploadOnCloudinary;
 ---
 
 ## 🎯 Next: Chapter 18 - User Registration
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 16: HTTP Fundamentals](./16_HTTP_FUNDAMENTALS.md) | [📖 Course Index](../README.md) | [Chapter 18: User Registration →](./18_USER_REGISTRATION.md) |

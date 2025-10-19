@@ -95,3 +95,11 @@ const result = await User.aggregate([
 ---
 
 ## 🎯 Next: Chapter 25 - Channel Profile Implementation
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 23: Account Management](./23_ACCOUNT_MANAGEMENT.md) | [📖 Course Index](../README.md) | [Chapter 25: Channel Profile →](./25_CHANNEL_PROFILE.md) |

@@ -371,3 +371,11 @@ Every tool you need is just `npm install` away.
 ## 🎯 Next Steps
 
 Now that you understand the landscape, let's focus on **JavaScript/Node.js/Express** for the rest of this course. Next chapter: **Chapter 4: Backend Architecture Concepts** - understanding how all the pieces work together!
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 2: Core Components](./02_CHAPTER_CORE_COMPONENTS.md) | [📖 Course Index](../README.md) | [Chapter 4: Architecture Concepts →](./04_BACKEND_ARCHITECTURE_CONCEPTS.md) |

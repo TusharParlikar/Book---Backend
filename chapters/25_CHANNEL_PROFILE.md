@@ -58,3 +58,11 @@ exports.getUserChannelProfile = asyncHandler(async (req, res) => {
 ---
 
 ## 🎯 Next: Chapter 26 - Watch History
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 24: Aggregation Pipelines](./24_AGGREGATION_PIPELINES.md) | [📖 Course Index](../README.md) | [Chapter 26: Watch History →](./26_WATCH_HISTORY.md) |

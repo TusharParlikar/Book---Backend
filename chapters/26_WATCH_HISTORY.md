@@ -50,3 +50,11 @@ exports.getWatchHistory = asyncHandler(async (req, res) => {
 ---
 
 ## 🎯 Next: Chapter 27 - Course Summary
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 25: Channel Profile](./25_CHANNEL_PROFILE.md) | [📖 Course Index](../README.md) | [Chapter 27: Course Summary →](./27_COURSE_SUMMARY.md) |

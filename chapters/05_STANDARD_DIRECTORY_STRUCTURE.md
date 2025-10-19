@@ -751,3 +751,11 @@ app.listen(PORT, () => {
 ## 🎯 Next Steps
 
 Now you understand the professional structure. Next: **Chapter 6: JavaScript Backend Scenarios** - common real-world situations you'll handle!
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 4: Architecture Concepts](./04_BACKEND_ARCHITECTURE_CONCEPTS.md) | [📖 Course Index](../README.md) | [Chapter 6: JavaScript Scenarios →](./06_JAVASCRIPT_SCENARIOS.md) |

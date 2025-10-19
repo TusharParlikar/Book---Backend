@@ -107,3 +107,11 @@ export default function Login() {
 ---
 
 ## 🎯 Next: Chapter 20 - User Logout
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 18: User Registration](./18_USER_REGISTRATION.md) | [📖 Course Index](../README.md) | [Chapter 20: User Logout →](./20_USER_LOGOUT.md) |

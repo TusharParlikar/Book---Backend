@@ -97,3 +97,11 @@ module.exports = Hospital;
 ---
 
 ## 🎯 Next: Chapter 13 - Security and Authentication
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 11: Advanced E-commerce Models](./11_ADVANCED_ECOMMERCE_MODELS.md) | [📖 Course Index](../README.md) | [Chapter 13: Security & Authentication →](./13_SECURITY_AUTHENTICATION_SETUP.md) |

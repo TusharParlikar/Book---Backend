@@ -435,3 +435,11 @@ app.listen(5000);
 ## 🎯 Next Steps
 
 You now understand the core components. Next, we'll explore **Chapter 3: Backend Languages & Frameworks** to see how other technologies compare.
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 1: Introduction](./01_CHAPTER_INTRODUCTION_BASICS.md) | [📖 Course Index](../README.md) | [Chapter 3: Languages & Frameworks →](./03_BACKEND_LANGUAGES_FRAMEWORKS.md) |

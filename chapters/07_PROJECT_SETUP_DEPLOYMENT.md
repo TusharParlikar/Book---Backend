@@ -567,3 +567,11 @@ These folders will now be tracked by Git even when empty!
 ## 🎯 Next Steps
 
 Your project is set up and deployed! Next: **Chapter 8: Full-Stack Integration** - connecting your React frontend to your Express backend!
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 6: JavaScript Scenarios](./06_JAVASCRIPT_SCENARIOS.md) | [📖 Course Index](../README.md) | [Chapter 8: Full-Stack Integration →](./08_FULL_STACK_INTEGRATION.md) |

@@ -60,3 +60,11 @@ exports.refreshAccessToken = asyncHandler(async (req, res) => {
 ---
 
 ## 🎯 Next: Chapter 23 - User Account Management
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 21: JWT Verification](./21_JWT_VERIFICATION.md) | [📖 Course Index](../README.md) | [Chapter 23: Account Management →](./23_ACCOUNT_MANAGEMENT.md) |

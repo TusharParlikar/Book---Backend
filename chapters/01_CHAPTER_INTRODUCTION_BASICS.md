@@ -222,3 +222,11 @@ When your app goes live:
 ## 🎯 Next Steps
 
 Ready to dive in? Move to **Chapter 2: Core Components for Backend Mastery** to understand what technologies and concepts you need to master backend development.
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| — | [📖 Course Index](../README.md) | [Chapter 2: Core Components →](./02_CHAPTER_CORE_COMPONENTS.md) |

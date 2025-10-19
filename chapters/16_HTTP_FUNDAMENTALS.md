@@ -86,3 +86,11 @@ OPTIONS - What methods allowed
 ---
 
 ## 🎯 Next: Chapter 17 - File Upload Implementation
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 15: Error Handling & Responses](./15_ERROR_HANDLING_RESPONSES.md) | [📖 Course Index](../README.md) | [Chapter 17: File Uploads →](./17_FILE_UPLOADS.md) |

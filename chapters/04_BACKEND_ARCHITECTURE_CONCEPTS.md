@@ -550,3 +550,11 @@ Large (Microservices, caching layers, CDN)
 ## 🎯 Next Steps
 
 You now understand backend architecture. Next: **Chapter 5: Standard Backend Directory Structure** - how to organize your code for professional projects!
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 3: Languages & Frameworks](./03_BACKEND_LANGUAGES_FRAMEWORKS.md) | [📖 Course Index](../README.md) | [Chapter 5: Directory Structure →](./05_STANDARD_DIRECTORY_STRUCTURE.md) |

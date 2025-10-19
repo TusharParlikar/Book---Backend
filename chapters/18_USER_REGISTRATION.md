@@ -137,3 +137,11 @@ export default function Register() {
 ---
 
 ## 🎯 Next: Chapter 19 - User Login
+
+---
+
+## 📚 Chapter Navigation
+
+| Previous | Index | Next |
+|----------|-------|------|
+| [← Chapter 17: File Uploads](./17_FILE_UPLOADS.md) | [📖 Course Index](../README.md) | [Chapter 19: User Login →](./19_USER_LOGIN.md) |
