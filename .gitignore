@@ -1,53 +1,140 @@
-# Node.js
+# ============================================================================
+# COMPLETE BACKEND COURSE - GITIGNORE FILE
+# ============================================================================
+
+# NODE.JS & NPM
+# ============================================================================
 node_modules/
 npm-debug.log*
+npm-debug.log
 yarn-debug.log*
 yarn-error.log*
 .npm
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
+lerna-debug.log*
 
-# Environment variables
+# ENVIRONMENT VARIABLES (NEVER COMMIT!)
+# ============================================================================
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.*.local
 
-# IDE
+# IDE AND EDITOR
+# ============================================================================
 .vscode/
+.vscode-test
 .idea/
+*.sublime-workspace
+*.sublime-project
 *.swp
 *.swo
 *~
+*.swp~
 .DS_Store
+.AppleDouble
+.LSOverride
 
-# OS
+# OPERATING SYSTEM
+# ============================================================================
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.trashes
 
-# Build
+# BUILD & DIST
+# ============================================================================
 dist/
 build/
+out/
+.next/
+.nuxt/
+coverage/
 
-# Logs
+# LOGS
+# ============================================================================
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# Temporary
+# TEMPORARY FILES
+# ============================================================================
 temp/
 tmp/
 .cache/
+*.tmp
+*.bak
+*.swp
 
-# Database
+# DATABASE FILES
+# ============================================================================
 *.db
 *.sqlite
 *.sqlite3
+*.mdb
+mongodb/
+data/
 
-# Dependencies lock files
+# SECRETS & CREDENTIALS
+# ============================================================================
+.env
+.env.*.local
+secrets/
+credentials.json
+API_KEYS.txt
+
+# DEPENDENCIES LOCK FILES
+# ============================================================================
 .lock
 
-# OS specific
+# TESTING
+# ============================================================================
+.nyc_output/
+coverage/
+*.lcov
+jest.config.js
+
+# MISC
+# ============================================================================
+.project
+.classpath
+.c9/
+.history/
+.viminfo
+.jest-cache
+.eslintcache
+.prettierignore
+
+# MONGO
+# ============================================================================
+data/db/
+mongodb/
+
+# EDITOR CONFIG
+# ============================================================================
+.editorconfig
+
+# GIT
+# ============================================================================
+.git/
+
+# COURSE SPECIFIC
+# ============================================================================
+# Keep all chapter files and documentation
+!chapters/
+!*.md
+!.gitignore
+!package.json
+!.env.example
 .AppleDouble
 .LSOverride
 
