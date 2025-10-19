@@ -1,0 +1,62 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Temporary
+temp/
+tmp/
+.cache/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Dependencies lock files
+.lock
+
+# OS specific
+.AppleDouble
+.LSOverride
+
+# IDE specific
+*.sublime-workspace
+*.sublime-project
+
+# Misc
+.env.example.local
+TODO.md
+debug.log
+context.md
