@@ -85,4 +85,4 @@ Create `.prettierrc`:
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 13: Security & Authentication](./13_SECURITY_AUTHENTICATION_SETUP.md) | [📖 Course Index](../README.md) | [Chapter 15: Error Handling & Responses →](./15_ERROR_HANDLING_RESPONSES.md) |
+| [← Chapter 13: Security & Authentication](./13_SECURITY_AUTHENTICATION_SETUP.md) | [📖 Course Index](../INDEX.md) | [Chapter 15: Error Handling & Responses →](./15_ERROR_HANDLING_RESPONSES.md) |

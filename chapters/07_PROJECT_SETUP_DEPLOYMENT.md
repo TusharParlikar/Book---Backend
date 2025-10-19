@@ -574,4 +574,4 @@ Your project is set up and deployed! Next: **Chapter 8: Full-Stack Integration**
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 6: JavaScript Scenarios](./06_JAVASCRIPT_SCENARIOS.md) | [📖 Course Index](../README.md) | [Chapter 8: Full-Stack Integration →](./08_FULL_STACK_INTEGRATION.md) |
+| [← Chapter 6: JavaScript Scenarios](./06_JAVASCRIPT_SCENARIOS.md) | [📖 Course Index](../INDEX.md) | [Chapter 8: Full-Stack Integration →](./08_FULL_STACK_INTEGRATION.md) |

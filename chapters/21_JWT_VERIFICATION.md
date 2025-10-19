@@ -66,4 +66,4 @@ router.delete('/profile', verifyJWT, userController.deleteProfile);
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 20: User Logout](./20_USER_LOGOUT.md) | [📖 Course Index](../README.md) | [Chapter 22: Token Refresh →](./22_TOKEN_REFRESH.md) |
+| [← Chapter 20: User Logout](./20_USER_LOGOUT.md) | [📖 Course Index](../INDEX.md) | [Chapter 22: Token Refresh →](./22_TOKEN_REFRESH.md) |

@@ -91,4 +91,4 @@ module.exports = connectDB;
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 8: Full-Stack Integration](./08_FULL_STACK_INTEGRATION.md) | [📖 Course Index](../README.md) | [Chapter 10: Basic Data Models →](./10_BASIC_DATA_MODELS.md) |
+| [← Chapter 8: Full-Stack Integration](./08_FULL_STACK_INTEGRATION.md) | [📖 Course Index](../INDEX.md) | [Chapter 10: Basic Data Models →](./10_BASIC_DATA_MODELS.md) |

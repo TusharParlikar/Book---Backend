@@ -378,4 +378,4 @@ Now that you understand the landscape, let's focus on **JavaScript/Node.js/Expre
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 2: Core Components](./02_CHAPTER_CORE_COMPONENTS.md) | [📖 Course Index](../README.md) | [Chapter 4: Architecture Concepts →](./04_BACKEND_ARCHITECTURE_CONCEPTS.md) |
+| [← Chapter 2: Core Components](./02_CHAPTER_CORE_COMPONENTS.md) | [📖 Course Index](../INDEX.md) | [Chapter 4: Architecture Concepts →](./04_BACKEND_ARCHITECTURE_CONCEPTS.md) |

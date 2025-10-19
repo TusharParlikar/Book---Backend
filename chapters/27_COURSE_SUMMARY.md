@@ -209,4 +209,4 @@ Happy coding! 🎊
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 26: Watch History](./26_WATCH_HISTORY.md) | [📖 Course Index](../README.md) | — |
+| [← Chapter 26: Watch History](./26_WATCH_HISTORY.md) | [📖 Course Index](../INDEX.md) | — |

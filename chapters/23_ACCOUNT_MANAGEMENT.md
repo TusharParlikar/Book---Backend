@@ -71,4 +71,4 @@ exports.updateAvatar = asyncHandler(async (req, res) => {
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 22: Token Refresh](./22_TOKEN_REFRESH.md) | [📖 Course Index](../README.md) | [Chapter 24: Aggregation Pipelines →](./24_AGGREGATION_PIPELINES.md) |
+| [← Chapter 22: Token Refresh](./22_TOKEN_REFRESH.md) | [📖 Course Index](../INDEX.md) | [Chapter 24: Aggregation Pipelines →](./24_AGGREGATION_PIPELINES.md) |

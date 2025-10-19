@@ -57,4 +57,4 @@ exports.getWatchHistory = asyncHandler(async (req, res) => {
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 25: Channel Profile](./25_CHANNEL_PROFILE.md) | [📖 Course Index](../README.md) | [Chapter 27: Course Summary →](./27_COURSE_SUMMARY.md) |
+| [← Chapter 25: Channel Profile](./25_CHANNEL_PROFILE.md) | [📖 Course Index](../INDEX.md) | [Chapter 27: Course Summary →](./27_COURSE_SUMMARY.md) |

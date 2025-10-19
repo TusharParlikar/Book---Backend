@@ -229,4 +229,4 @@ Ready to dive in? Move to **Chapter 2: Core Components for Backend Mastery** to 
 
 | Previous | Index | Next |
 |----------|-------|------|
-| — | [📖 Course Index](../README.md) | [Chapter 2: Core Components →](./02_CHAPTER_CORE_COMPONENTS.md) |
+| — | [📖 Course Index](../INDEX.md) | [Chapter 2: Core Components →](./02_CHAPTER_CORE_COMPONENTS.md) |

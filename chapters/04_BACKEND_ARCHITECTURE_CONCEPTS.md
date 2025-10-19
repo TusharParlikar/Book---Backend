@@ -557,4 +557,4 @@ You now understand backend architecture. Next: **Chapter 5: Standard Backend Dir
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 3: Languages & Frameworks](./03_BACKEND_LANGUAGES_FRAMEWORKS.md) | [📖 Course Index](../README.md) | [Chapter 5: Directory Structure →](./05_STANDARD_DIRECTORY_STRUCTURE.md) |
+| [← Chapter 3: Languages & Frameworks](./03_BACKEND_LANGUAGES_FRAMEWORKS.md) | [📖 Course Index](../INDEX.md) | [Chapter 5: Directory Structure →](./05_STANDARD_DIRECTORY_STRUCTURE.md) |

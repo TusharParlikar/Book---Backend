@@ -144,4 +144,4 @@ export default function Register() {
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 17: File Uploads](./17_FILE_UPLOADS.md) | [📖 Course Index](../README.md) | [Chapter 19: User Login →](./19_USER_LOGIN.md) |
+| [← Chapter 17: File Uploads](./17_FILE_UPLOADS.md) | [📖 Course Index](../INDEX.md) | [Chapter 19: User Login →](./19_USER_LOGIN.md) |

@@ -442,4 +442,4 @@ You now understand the core components. Next, we'll explore **Chapter 3: Backend
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 1: Introduction](./01_CHAPTER_INTRODUCTION_BASICS.md) | [📖 Course Index](../README.md) | [Chapter 3: Languages & Frameworks →](./03_BACKEND_LANGUAGES_FRAMEWORKS.md) |
+| [← Chapter 1: Introduction](./01_CHAPTER_INTRODUCTION_BASICS.md) | [📖 Course Index](../INDEX.md) | [Chapter 3: Languages & Frameworks →](./03_BACKEND_LANGUAGES_FRAMEWORKS.md) |

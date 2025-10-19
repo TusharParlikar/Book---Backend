@@ -102,4 +102,4 @@ const result = await User.aggregate([
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 23: Account Management](./23_ACCOUNT_MANAGEMENT.md) | [📖 Course Index](../README.md) | [Chapter 25: Channel Profile →](./25_CHANNEL_PROFILE.md) |
+| [← Chapter 23: Account Management](./23_ACCOUNT_MANAGEMENT.md) | [📖 Course Index](../INDEX.md) | [Chapter 25: Channel Profile →](./25_CHANNEL_PROFILE.md) |

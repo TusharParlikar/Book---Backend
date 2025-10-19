@@ -144,4 +144,4 @@ app.use(errorHandler);
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 14: Professional Project Setup](./14_PROFESSIONAL_PROJECT_SETUP.md) | [📖 Course Index](../README.md) | [Chapter 16: HTTP Fundamentals →](./16_HTTP_FUNDAMENTALS.md) |
+| [← Chapter 14: Professional Project Setup](./14_PROFESSIONAL_PROJECT_SETUP.md) | [📖 Course Index](../INDEX.md) | [Chapter 16: HTTP Fundamentals →](./16_HTTP_FUNDAMENTALS.md) |

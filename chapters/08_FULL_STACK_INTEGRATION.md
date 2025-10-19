@@ -324,4 +324,4 @@ Frontend connected to backend! Next: **Chapter 9: Data Modeling Fundamentals**
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 7: Project Setup & Deployment](./07_PROJECT_SETUP_DEPLOYMENT.md) | [📖 Course Index](../README.md) | [Chapter 9: Data Modeling Fundamentals →](./09_DATA_MODELING_FUNDAMENTALS.md) |
+| [← Chapter 7: Project Setup & Deployment](./07_PROJECT_SETUP_DEPLOYMENT.md) | [📖 Course Index](../INDEX.md) | [Chapter 9: Data Modeling Fundamentals →](./09_DATA_MODELING_FUNDAMENTALS.md) |

@@ -758,4 +758,4 @@ Now you understand the professional structure. Next: **Chapter 6: JavaScript Bac
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 4: Architecture Concepts](./04_BACKEND_ARCHITECTURE_CONCEPTS.md) | [📖 Course Index](../README.md) | [Chapter 6: JavaScript Scenarios →](./06_JAVASCRIPT_SCENARIOS.md) |
+| [← Chapter 4: Architecture Concepts](./04_BACKEND_ARCHITECTURE_CONCEPTS.md) | [📖 Course Index](../INDEX.md) | [Chapter 6: JavaScript Scenarios →](./06_JAVASCRIPT_SCENARIOS.md) |

@@ -218,4 +218,4 @@ module.exports = Post;
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 9: Data Modeling Fundamentals](./09_DATA_MODELING_FUNDAMENTALS.md) | [📖 Course Index](../README.md) | [Chapter 11: Advanced E-commerce Models →](./11_ADVANCED_ECOMMERCE_MODELS.md) |
+| [← Chapter 9: Data Modeling Fundamentals](./09_DATA_MODELING_FUNDAMENTALS.md) | [📖 Course Index](../INDEX.md) | [Chapter 11: Advanced E-commerce Models →](./11_ADVANCED_ECOMMERCE_MODELS.md) |

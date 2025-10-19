@@ -62,4 +62,4 @@ export function useLogout() {
 
 | Previous | Index | Next |
 |----------|-------|------|
-| [← Chapter 19: User Login](./19_USER_LOGIN.md) | [📖 Course Index](../README.md) | [Chapter 21: JWT Verification →](./21_JWT_VERIFICATION.md) |
+| [← Chapter 19: User Login](./19_USER_LOGIN.md) | [📖 Course Index](../INDEX.md) | [Chapter 21: JWT Verification →](./21_JWT_VERIFICATION.md) |
