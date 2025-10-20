@@ -240,19 +240,19 @@ These 5 **production-grade full-stack applications** use ALL concepts from 20 ch
    - Multi-tenancy, Razorpay subscriptions, AI assistant, real-time collaboration
    - Time: 45-50 hours
 
-2. **[AI-Powered E-Commerce Platform](52-55-advanced-projects.md#project-52)** ⭐⭐⭐
+2. **[AI-Powered E-Commerce Platform](52-ai-ecommerce-platform.md)** ⭐⭐⭐
    - ML recommendations, smart search, dynamic pricing, sentiment analysis
    - Time: 50 hours
 
-3. **[Social Media Platform](52-55-advanced-projects.md#project-53)** ⭐⭐⭐
+3. **[Social Media Platform](53-social-media-platform.md)** ⭐⭐⭐
    - News feed algorithm, real-time updates, content moderation
    - Time: 55 hours
 
-4. **[Real-Time Collaboration Platform](52-55-advanced-projects.md#project-54)** ⭐⭐⭐
+4. **[Real-Time Collaboration Platform](54-collaboration-platform.md)** ⭐⭐⭐
    - WebRTC video, collaborative docs, whiteboard, screen sharing
    - Time: 60 hours
 
-5. **[Business Intelligence Platform](52-55-advanced-projects.md#project-55)** ⭐⭐⭐
+5. **[Business Intelligence Platform](55-business-intelligence.md)** ⭐⭐⭐
    - Data visualization, ETL pipeline, ML insights, scheduled reports
    - Time: 50 hours
 
