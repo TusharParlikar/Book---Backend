@@ -263,6 +263,21 @@ export default ProtectedTodos;
 
 ---
 
+## 🎯 Practice Projects
+
+Build these projects with JWT authentication:
+
+**Recommended Projects:**
+- [Project #18: Job Board](../projects/18-job-board.md) - Role-based access ⭐
+- [Project #19: Event Management](../projects/19-event-management.md) - Ticket booking
+- [Project #24: Password Reset System](../projects/24-password-reset-system.md) - Secure reset flow ⭐
+- [Project #25: Email Verification](../projects/25-email-verification.md) - Account activation
+- [Project #26: Multi-Device Login](../projects/26-multi-device-login.md) - Session management
+
+**Time Required:** 4-6 hours per project
+
+---
+
 ## Interview Questions
 
 **Q1: Why use JWT instead of sessions?**
@@ -277,3 +292,4 @@ export default ProtectedTodos;
 | Previous | Index | Next |
 |----------|-------|------|
 | [B07: Password Security](B07_PASSWORD_SECURITY.md) | [BEGINNER_INDEX.md](../BEGINNER_INDEX.md) | [B09: Complete Auth Flow](B09_COMPLETE_AUTH_FLOW.md) |
+

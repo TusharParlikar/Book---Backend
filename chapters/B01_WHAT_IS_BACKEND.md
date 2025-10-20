@@ -1083,6 +1083,22 @@ const user = await User.findById(id).select('name email avatar');
 - ✅ Connected React to backend
 - ✅ Understood data flow
 
+---
+
+## 🎯 Practice Projects
+
+Now that you understand backend basics, try building these beginner projects:
+
+**Recommended Projects:**
+- [Project #01: Personal Portfolio API](../projects/01-personal-portfolio-api.md) - Your first API
+- [Project #02: Quote of the Day API](../projects/02-quote-of-day-api.md) - Random data serving
+- [Project #03: Weather Info API](../projects/03-weather-info-api.md) - External API integration
+- [Project #10: Calculator API](../projects/10-calculator-api.md) - Math operations as REST API
+
+**Time Required:** 2-3 hours per project
+
+---
+
 ### What's Next (B02):
 In the next chapter, we'll:
 - **B02: Express & Routing** - Learn how to build complex routes
@@ -1090,9 +1106,10 @@ In the next chapter, we'll:
 
 ### Homework Before B02:
 1. ✅ Complete the Project Task above
-2. ✅ Get React and backend talking
-3. ✅ Make sure you understand the data flow
-4. ✅ Try to break your backend and fix it
+2. ✅ Build at least ONE practice project from above
+3. ✅ Get React and backend talking
+4. ✅ Make sure you understand the data flow
+5. ✅ Try to break your backend and fix it
 
 ---
 

@@ -1540,6 +1540,25 @@ app.get('/api/todos', (req, res) => {
 
 ---
 
+## 🎯 Practice Projects
+
+Apply what you learned about routing and CRUD operations:
+
+**Recommended Projects:**
+- [Project #04: Todo List API](../projects/04-todo-list-api.md) - Full CRUD with validation ⭐
+- [Project #05: Blog Post API](../projects/05-blog-post-api.md) - Posts with comments
+- [Project #06: URL Shortener](../projects/06-url-shortener.md) - Hash algorithms
+- [Project #07: Contact Form API](../projects/07-contact-form-api.md) - Email integration
+- [Project #08: Note Taking App](../projects/08-note-taking-app.md) - Folders and tags
+- [Project #09: Bookmark Manager](../projects/09-bookmark-manager.md) - Collections
+- [Project #11: Random User Generator](../projects/11-random-user-generator.md) - Faker.js
+- [Project #12: Polling System](../projects/12-polling-system.md) - Voting system
+- [Project #13: Expense Tracker](../projects/13-expense-tracker.md) - Financial tracking
+
+**Time Required:** 3-5 hours per project
+
+---
+
 ## Next Chapter
 
 🎉 Completed **B02: Express & Routing**
@@ -1551,8 +1570,9 @@ app.get('/api/todos', (req, res) => {
 
 ### Homework:
 1. ✅ Complete the Blog API project
-2. ✅ Get React fully working with backend
-3. ✅ Practice all CRUD operations
+2. ✅ Build at least TWO practice projects from above
+3. ✅ Get React fully working with backend
+4. ✅ Practice all CRUD operations
 
 ---
 

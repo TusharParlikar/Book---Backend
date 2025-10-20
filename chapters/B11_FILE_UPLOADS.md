@@ -227,6 +227,19 @@ export default ImageUpload;
 
 ---
 
+## 🎯 Practice Projects
+
+Implement file uploads in these projects:
+
+**Recommended Projects:**
+- [Project #34: Image Gallery](../projects/34-image-gallery.md) - Cloudinary upload ⭐
+- [Project #35: Profile Picture Upload](../projects/35-profile-picture-upload.md) - Avatar cropping
+- [Project #36: Document Manager](../projects/36-document-manager.md) - File management system
+
+**Time Required:** 5-7 hours per project
+
+---
+
 | Previous | Index | Next |
 |----------|-------|------|
 | [B10: E-Commerce Backend](B10_ECOMMERCE_BACKEND.md) | [BEGINNER_INDEX.md](../BEGINNER_INDEX.md) | [B12: Complete Project](B12_COMPLETE_PROJECT.md) |

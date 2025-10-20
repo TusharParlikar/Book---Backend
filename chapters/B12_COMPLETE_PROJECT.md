@@ -222,6 +222,20 @@ module.exports = { getUserProfile, followUser, unfollowUser };
 
 ---
 
+## 🎯 Practice Projects
+
+Build complete full-stack applications:
+
+**Recommended Projects:**
+- [Project #31: Social Media Backend](../projects/31-social-media-backend.md) - Posts, likes, comments ⭐⭐
+- [Project #32: News Feed Algorithm](../projects/32-news-feed-algorithm.md) - Engagement ranking ⭐⭐
+- [Project #33: Follow System](../projects/33-follow-system.md) - Social graph
+- [Project #37: Real-Time Chat](../projects/37-realtime-chat.md) - Socket.io messaging
+
+**Time Required:** 10-15 hours per project
+
+---
+
 | Previous | Index | Next |
 |----------|-------|------|
 | [B11: File Uploads](B11_FILE_UPLOADS.md) | [BEGINNER_INDEX.md](../BEGINNER_INDEX.md) | [B13: Docker & Containerization](B13_DOCKER_CONTAINERIZATION.md) |
