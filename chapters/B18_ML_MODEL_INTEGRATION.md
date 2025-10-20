@@ -411,6 +411,19 @@ router.get('/products/recommendations', auth, async (req, res) => {
 pip install tensorflow pillow
 ```
 
+<details>
+<summary>💡 Expected Output</summary>
+
+```bash
+Collecting tensorflow
+  Downloading tensorflow-2.12.0-cp310-cp310-win_amd64.whl (1.5 kB)
+Collecting pillow
+  Downloading Pillow-9.5.0-cp310-cp310-win_amd64.whl (2.5 MB)
+...
+Successfully installed tensorflow-2.12.0 pillow-9.5.0
+```
+</details>
+
 **Python Service:**
 
 ```python

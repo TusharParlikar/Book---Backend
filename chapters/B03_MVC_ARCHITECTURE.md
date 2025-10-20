@@ -344,13 +344,13 @@ const todoDb = require('../models/todoDatabase');
 // ============================================================
 // CONTROLLER FUNCTION: Get all todos
 // ============================================================
-const getAllTodos = (req, res) => {
+const getAllTodos = async (req, res) => {
   try {
     // STEP 1: Get filter from query parameters
     const { status, limit = 10, sort = 'newest' } = req.query;
 
     // STEP 2: Get todos from MODEL
-    let todos = todoDb.getAll();
+    let todos = await todoDb.getAll();
 
     // STEP 3: FILTER: Apply status filter
     if (status === 'completed') {
@@ -391,12 +391,12 @@ const getAllTodos = (req, res) => {
 // ============================================================
 // CONTROLLER FUNCTION: Get single todo
 // ============================================================
-const getTodoById = (req, res) => {
+const getTodoById = async (req, res) => {
   try {
     const { id } = req.params;
 
     // Get from MODEL
-    const todo = todoDb.getById(id);
+    const todo = await todoDb.getById(id);
 
     if (!todo) {
       return res.status(404).json({
@@ -423,7 +423,7 @@ const getTodoById = (req, res) => {
 // ============================================================
 // CONTROLLER FUNCTION: Create todo
 // ============================================================
-const createTodo = (req, res) => {
+const createTodo = async (req, res) => {
   try {
     const { title, description, priority } = req.body;
 
@@ -439,7 +439,7 @@ const createTodo = (req, res) => {
     }
 
     // STEP 2: CREATE: Use MODEL to create
-    const newTodo = todoDb.create(title, description, priority);
+    const newTodo = await todoDb.create(title, description, priority);
 
     // STEP 3: RESPONSE: Send back
     res.status(201).json({
@@ -460,7 +460,7 @@ const createTodo = (req, res) => {
 // ============================================================
 // CONTROLLER FUNCTION: Update todo
 // ============================================================
-const updateTodo = (req, res) => {
+const updateTodo = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -477,7 +477,7 @@ const updateTodo = (req, res) => {
     }
 
     // UPDATE using MODEL
-    const updatedTodo = todoDb.update(id, updateData);
+    const updatedTodo = await todoDb.update(id, updateData);
 
     if (!updatedTodo) {
       return res.status(404).json({
@@ -503,12 +503,12 @@ const updateTodo = (req, res) => {
 // ============================================================
 // CONTROLLER FUNCTION: Delete todo
 // ============================================================
-const deleteTodo = (req, res) => {
+const deleteTodo = async (req, res) => {
   try {
     const { id } = req.params;
 
     // DELETE using MODEL
-    const deleted = todoDb.delete(id);
+    const deleted = await todoDb.delete(id);
 
     if (!deleted) {
       return res.status(404).json({
@@ -791,6 +791,14 @@ app.listen(5000, () => {
   console.log('✅ Server running on port 5000');
 });
 ```
+
+<details>
+<summary>💡 Expected Server Output</summary>
+
+```bash
+✅ Server running on port 5000
+```
+</details>
 
 ### Benefits of This Structure
 

@@ -44,6 +44,17 @@ By the end of this chapter, you will:
 pip install pandas pymongo matplotlib seaborn openpyxl reportlab
 ```
 
+<details>
+<summary>💡 Expected Output</summary>
+
+```bash
+Collecting pandas
+  Downloading pandas-2.0.1-cp310-cp310-win_amd64.whl (11.6 MB)
+...
+Successfully installed pandas-2.0.1 pymongo-4.3.3 matplotlib-3.7.1 seaborn-0.12.2 openpyxl-3.1.2 reportlab-3.6.12
+```
+</details>
+
 ### Connect to MongoDB
 
 **File:** `analytics-service/db.py`

@@ -672,35 +672,43 @@ function generateId() {
 // ============================================================
 
 app.get('/api/todos', (req, res) => {
-  // STEP 1: Get query parameters for filtering
-  const { status, limit = 10, sort = 'newest' } = req.query;
-  
-  // STEP 2: Filter todos
-  let filteredTodos = todos;
-  
-  if (status === 'completed') {
-    filteredTodos = todos.filter(todo => todo.completed === true);
-  } else if (status === 'pending') {
-    filteredTodos = todos.filter(todo => todo.completed === false);
+  try {
+    // STEP 1: Get query parameters for filtering
+    const { status, limit = 10, sort = 'newest' } = req.query;
+    
+    // STEP 2: Filter todos
+    let filteredTodos = todos;
+    
+    if (status === 'completed') {
+      filteredTodos = todos.filter(todo => todo.completed === true);
+    } else if (status === 'pending') {
+      filteredTodos = todos.filter(todo => todo.completed === false);
+    }
+    
+    // STEP 3: Sort todos
+    if (sort === 'oldest') {
+      filteredTodos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } else if (sort === 'newest') {
+      filteredTodos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    
+    // STEP 4: Apply limit
+    filteredTodos = filteredTodos.slice(0, parseInt(limit));
+    
+    // STEP 5: Send response
+    res.json({
+      success: true,
+      message: 'Todos retrieved',
+      data: filteredTodos,
+      total: filteredTodos.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve todos',
+      error: error.message
+    });
   }
-  
-  // STEP 3: Sort todos
-  if (sort === 'oldest') {
-    filteredTodos.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-  } else if (sort === 'newest') {
-    filteredTodos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  }
-  
-  // STEP 4: Apply limit
-  filteredTodos = filteredTodos.slice(0, parseInt(limit));
-  
-  // STEP 5: Send response
-  res.json({
-    success: true,
-    message: 'Todos retrieved',
-    data: filteredTodos,
-    total: filteredTodos.length
-  });
 });
 
 // ============================================================
@@ -708,26 +716,34 @@ app.get('/api/todos', (req, res) => {
 // ============================================================
 
 app.get('/api/todos/:id', (req, res) => {
-  const { id } = req.params;
-  
-  // Find todo with this ID
-  const todo = todos.find(t => t.id === id);
-  
-  // Check if found
-  if (!todo) {
-    return res.status(404).json({
+  try {
+    const { id } = req.params;
+    
+    // Find todo with this ID
+    const todo = todos.find(t => t.id === id);
+    
+    // Check if found
+    if (!todo) {
+      return res.status(404).json({
+        success: false,
+        message: 'Todo not found',
+        id: id
+      });
+    }
+    
+    // Return the todo
+    res.json({
+      success: true,
+      message: 'Todo retrieved',
+      data: todo
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: 'Todo not found',
-      id: id
+      message: 'Failed to retrieve todo',
+      error: error.message
     });
   }
-  
-  // Return the todo
-  res.json({
-    success: true,
-    message: 'Todo retrieved',
-    data: todo
-  });
 });
 
 // ============================================================
@@ -735,52 +751,60 @@ app.get('/api/todos/:id', (req, res) => {
 // ============================================================
 
 app.post('/api/todos', (req, res) => {
-  // STEP 1: Get data from request body
-  const { title, description, priority } = req.body;
-  
-  // STEP 2: Validate required fields
-  if (!title) {
-    return res.status(400).json({
+  try {
+    // STEP 1: Get data from request body
+    const { title, description, priority } = req.body;
+    
+    // STEP 2: Validate required fields
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: 'Title is required'
+      });
+    }
+    
+    // STEP 3: Validate field values
+    if (typeof title !== 'string' || title.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'Title must be non-empty text'
+      });
+    }
+    
+    if (title.length < 3) {
+      return res.status(400).json({
+        success: false,
+        message: 'Title must be at least 3 characters long'
+      });
+    }
+    
+    // STEP 4: Create new todo object
+    const newTodo = {
+      id: generateId(),
+      title: title.trim(),
+      description: description || '',
+      priority: priority || 'medium',
+      completed: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    
+    // STEP 5: Add to todos array
+    todos.push(newTodo);
+    
+    // STEP 6: Send response with 201 Created status
+    res.status(201).json({
+      success: true,
+      message: 'Todo created successfully',
+      data: newTodo
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: 'Title is required'
+      message: 'Failed to create todo',
+      error: error.message
     });
   }
-  
-  // STEP 3: Validate field values
-  if (typeof title !== 'string' || title.trim() === '') {
-    return res.status(400).json({
-      success: false,
-      message: 'Title must be non-empty text'
-    });
-  }
-  
-  if (title.length < 3) {
-    return res.status(400).json({
-      success: false,
-      message: 'Title must be at least 3 characters long'
-    });
-  }
-  
-  // STEP 4: Create new todo object
-  const newTodo = {
-    id: generateId(),
-    title: title.trim(),
-    description: description || '',
-    priority: priority || 'medium',
-    completed: false,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-  
-  // STEP 5: Add to todos array
-  todos.push(newTodo);
-  
-  // STEP 6: Send response with 201 Created status
-  res.status(201).json({
-    success: true,
-    message: 'Todo created successfully',
-    data: newTodo
-  });
 });
 
 // ============================================================
@@ -788,44 +812,52 @@ app.post('/api/todos', (req, res) => {
 // ============================================================
 
 app.put('/api/todos/:id', (req, res) => {
-  const { id } = req.params;
-  const { title, description, priority, completed } = req.body;
-  
-  // STEP 1: Find the todo
-  const todoIndex = todos.findIndex(t => t.id === id);
-  
-  if (todoIndex === -1) {
-    return res.status(404).json({
+  try {
+    const { id } = req.params;
+    const { title, description, priority, completed } = req.body;
+    
+    // STEP 1: Find the todo
+    const todoIndex = todos.findIndex(t => t.id === id);
+    
+    if (todoIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: 'Todo not found',
+        id: id
+      });
+    }
+    
+    // STEP 2: Validate new title
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: 'Title is required'
+      });
+    }
+    
+    // STEP 3: Update entire todo
+    todos[todoIndex] = {
+      ...todos[todoIndex],
+      title: title,
+      description: description !== undefined ? description : todos[todoIndex].description,
+      priority: priority || todos[todoIndex].priority,
+      completed: completed !== undefined ? completed : todos[todoIndex].completed,
+      updatedAt: new Date()
+    };
+    
+    // STEP 4: Send updated todo
+    res.json({
+      success: true,
+      message: 'Todo updated successfully',
+      data: todos[todoIndex]
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: 'Todo not found',
-      id: id
+      message: 'Failed to update todo',
+      error: error.message
     });
   }
-  
-  // STEP 2: Validate new title
-  if (!title) {
-    return res.status(400).json({
-      success: false,
-      message: 'Title is required'
-    });
-  }
-  
-  // STEP 3: Update entire todo
-  todos[todoIndex] = {
-    ...todos[todoIndex],
-    title: title,
-    description: description !== undefined ? description : todos[todoIndex].description,
-    priority: priority || todos[todoIndex].priority,
-    completed: completed !== undefined ? completed : todos[todoIndex].completed,
-    updatedAt: new Date()
-  };
-  
-  // STEP 4: Send updated todo
-  res.json({
-    success: true,
-    message: 'Todo updated successfully',
-    data: todos[todoIndex]
-  });
 });
 
 // ============================================================
@@ -833,34 +865,42 @@ app.put('/api/todos/:id', (req, res) => {
 // ============================================================
 
 app.patch('/api/todos/:id', (req, res) => {
-  const { id } = req.params;
-  const updates = req.body;  // Only updated fields
-  
-  // STEP 1: Find the todo
-  const todoIndex = todos.findIndex(t => t.id === id);
-  
-  if (todoIndex === -1) {
-    return res.status(404).json({
+  try {
+    const { id } = req.params;
+    const updates = req.body;  // Only updated fields
+    
+    // STEP 1: Find the todo
+    const todoIndex = todos.findIndex(t => t.id === id);
+    
+    if (todoIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: 'Todo not found',
+        id: id
+      });
+    }
+    
+    // STEP 2: Update only provided fields
+    // Use spread operator to merge updates
+    todos[todoIndex] = {
+      ...todos[todoIndex],
+      ...updates,
+      updatedAt: new Date()
+    };
+    
+    // STEP 3: Send updated todo
+    res.json({
+      success: true,
+      message: 'Todo updated successfully',
+      data: todos[todoIndex]
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: 'Todo not found',
-      id: id
+      message: 'Failed to update todo',
+      error: error.message
     });
   }
-  
-  // STEP 2: Update only provided fields
-  // Use spread operator to merge updates
-  todos[todoIndex] = {
-    ...todos[todoIndex],
-    ...updates,
-    updatedAt: new Date()
-  };
-  
-  // STEP 3: Send updated todo
-  res.json({
-    success: true,
-    message: 'Todo updated successfully',
-    data: todos[todoIndex]
-  });
 });
 
 // ============================================================
@@ -868,28 +908,36 @@ app.patch('/api/todos/:id', (req, res) => {
 // ============================================================
 
 app.delete('/api/todos/:id', (req, res) => {
-  const { id } = req.params;
-  
-  // STEP 1: Find todo index
-  const todoIndex = todos.findIndex(t => t.id === id);
-  
-  if (todoIndex === -1) {
-    return res.status(404).json({
+  try {
+    const { id } = req.params;
+    
+    // STEP 1: Find todo index
+    const todoIndex = todos.findIndex(t => t.id === id);
+    
+    if (todoIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: 'Todo not found',
+        id: id
+      });
+    }
+    
+    // STEP 2: Remove from array
+    const deletedTodo = todos.splice(todoIndex, 1)[0];
+    
+    // STEP 3: Send confirmation
+    res.json({
+      success: true,
+      message: 'Todo deleted successfully',
+      data: deletedTodo
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: 'Todo not found',
-      id: id
+      message: 'Failed to delete todo',
+      error: error.message
     });
   }
-  
-  // STEP 2: Remove from array
-  const deletedTodo = todos.splice(todoIndex, 1)[0];
-  
-  // STEP 3: Send confirmation
-  res.json({
-    success: true,
-    message: 'Todo deleted successfully',
-    data: deletedTodo
-  });
 });
 
 // ============================================================
@@ -921,6 +969,21 @@ app.listen(PORT, () => {
   console.log(`  DELETE /api/todos/:id    - Delete todo`);
 });
 ```
+
+<details>
+<summary>💡 Expected Terminal Output</summary>
+
+```text
+✅ Todo API running on http://localhost:5000
+📚 Available routes:
+  GET    /api/todos        - Get all todos
+  GET    /api/todos/:id    - Get single todo
+  POST   /api/todos        - Create todo
+  PUT    /api/todos/:id    - Update entire todo
+  PATCH  /api/todos/:id    - Update partial todo
+  DELETE /api/todos/:id    - Delete todo
+```
+</details>
 
 ---
 

@@ -146,6 +146,14 @@ app.use('/api/todos', todoRoutes);
 app.listen(5000, () => console.log('✅ Server on 5000'));
 ```
 
+<details>
+<summary>💡 Expected Server Output</summary>
+
+```bash
+✅ Server on 5000
+```
+</details>
+
 ---
 
 ## React Complete Auth

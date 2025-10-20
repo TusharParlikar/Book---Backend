@@ -72,6 +72,15 @@ Razorpay is India's leading payment gateway that supports:
 npm install razorpay
 ```
 
+<details>
+<summary>💡 Expected Output</summary>
+
+```bash
+added 1 package, and audited 2 packages in 1s
+found 0 vulnerabilities
+```
+</details>
+
 ### Step 3: Environment Variables
 
 Create `.env` file:

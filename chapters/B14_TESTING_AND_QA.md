@@ -150,7 +150,26 @@ describe('Auth API', () => {
 
 # Run tests
 npm test
+```
 
+<details>
+<summary>💡 Expected `npm test` Output</summary>
+
+```bash
+> my-app@1.0.0 test
+> jest
+
+PASS  tests/user.test.js
+PASS  tests/api.test.js
+Test Suites: 2 passed, 2 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        3.512 s
+Ran all test suites.
+```
+</details>
+
+```bash
 # Watch mode
 npm run test:watch
 

@@ -44,6 +44,15 @@ By the end of this chapter, you will:
 npm install socket.io socket.io-client redis ioredis
 ```
 
+<details>
+<summary>💡 Expected Output</summary>
+
+```bash
+added 4 packages, and audited 5 packages in 2s
+found 0 vulnerabilities
+```
+</details>
+
 ### Basic Server Setup
 
 **File:** `server.js`

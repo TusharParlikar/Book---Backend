@@ -115,7 +115,21 @@ railway login
 
 # Deploy
 railway deploy
+```
 
+<details>
+<summary>💡 Expected `railway deploy` Output</summary>
+
+```bash
+✓ Building...
+✓ Uploading...
+✓ Deploying...
+✓ Deployment successful!
+URL: https://my-app-production.up.railway.app
+```
+</details>
+
+```bash
 # Set environment variables
 railway variables
 ```

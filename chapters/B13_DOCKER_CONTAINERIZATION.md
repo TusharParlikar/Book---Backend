@@ -34,6 +34,14 @@ SOLUTION: Docker
 docker --version
 ```
 
+<details>
+<summary>💡 Expected Output</summary>
+
+```bash
+Docker version 20.10.7, build f0df350
+```
+</details>
+
 ---
 
 ## Implementation
@@ -127,7 +135,24 @@ docker-compose up
 
 # STOP CONTAINER
 docker-compose down
+```
 
+<details>
+<summary>💡 Expected `docker-compose up` Output</summary>
+
+```bash
+Creating network "my-app_default" with the default driver
+Creating my-app_mongodb_1 ... done
+Creating my-app_backend_1 ... done
+Attaching to my-app_mongodb_1, my-app_backend_1
+mongodb_1  | {"t":{"$date":"..."},"s":"I",  "c":"CONTROL",  "id":23285,   "ctx":"main","msg":"Automatically disabling TLS 1.0, to force-enable use --sslDisabledProtocols 'none'"}
+backend_1  | ✅ Server running on port 5000
+backend_1  | ✅ Connected to MongoDB
+mongodb_1  | {"t":{"$date":"..."},"s":"I",  "c":"NETWORK",  "id":23015,   "ctx":"listener","msg":"Listening on","attr":{"address":"0.0.0.0"}}
+```
+</details>
+
+```bash
 # VIEW LOGS
 docker logs container_id
 

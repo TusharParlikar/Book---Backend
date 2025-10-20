@@ -210,14 +210,36 @@ npm init -y
 
 # Install Express (our web framework)
 npm install express
-
-# Create main file
-echo. > index.js
 ```
+
+<details>
+<summary>💡 Expected Terminal Output</summary>
+
+```text
+Wrote to D:\Books\BackEnd\my-first-backend\package.json:
+
+{
+  "name": "my-first-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
+added 57 packages, and audited 58 packages in 2s
+
+found 0 vulnerabilities
+```
+</details>
 
 ### Step 2: Create Express Server
 
-Create `index.js` with this code:
+Create an `index.js` file in your `my-first-backend` directory with the following code. This server will have four API endpoints.
 
 ```javascript
 // ============================================================
@@ -380,22 +402,27 @@ app.listen(PORT, () => {
 ```bash
 # Start the server
 node index.js
-
-# You should see:
-# ✅ SERVER STARTED!
-# 🚀 Backend is running on http://localhost:5000
-# 📡 Ready to receive requests from React frontend
 ```
+
+<details>
+<summary>💡 Expected Terminal Output</summary>
+
+```text
+
+  ✅ SERVER STARTED!
+  🚀 Backend is running on http://localhost:5000
+  📡 Ready to receive requests from React frontend
+  
+```
+</details>
 
 ### Step 4: Test Your Backend
 
-Open your browser and go to:
+Open your browser or an API client like Postman and navigate to `http://localhost:5000`.
 
-```
-http://localhost:5000
-```
+<details>
+<summary>💡 Expected Browser/API Output</summary>
 
-You should see:
 ```json
 {
   "success": true,
@@ -406,12 +433,13 @@ You should see:
   }
 }
 ```
+</details>
 
 **Congratulations! Your first backend is running!** 🎉
 
-Try these URLs:
-- `http://localhost:5000/api/user` - Get single user
-- `http://localhost:5000/api/users` - Get all users
+Try these other URLs to see their outputs:
+- `http://localhost:5000/api/user`
+- `http://localhost:5000/api/users`
 
 ---
 
@@ -441,48 +469,50 @@ function HelloBackend() {
   const [users, setUsers] = useState([]);
 
   // ============================================================
-  // EFFECT: Run when component mounts
-  // This fetches data from our backend
+  // EFFECT: Run when component mounts to fetch data
+  // This uses modern async/await for cleaner code
   // ============================================================
   useEffect(() => {
-    // STEP 1: Fetch from backend
-    // Fetch returns a Promise, so we use .then()
-    fetch('http://localhost:5000')
-      .then((response) => {
-        // STEP 2: Check if response is okay (status 200-299)
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    // Define an async function to fetch all data
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch both endpoints in parallel for efficiency
+        const [mainResponse, usersResponse] = await Promise.all([
+          fetch('http://localhost:5000'),
+          fetch('http://localhost:5000/api/users')
+        ]);
+
+        // Check responses
+        if (!mainResponse.ok) {
+          throw new Error('Network response for main endpoint was not ok');
         }
-        // STEP 3: Convert response to JSON
-        // This parses the JSON string into JavaScript object
-        return response.json();
-      })
-      .then((result) => {
-        // STEP 4: Got data successfully
-        console.log('Data from backend:', result);
-        setData(result);
-        setLoading(false);
-      })
-      .catch((error) => {
-        // STEP 5: Something went wrong
+        if (!usersResponse.ok) {
+          throw new Error('Network response for users endpoint was not ok');
+        }
+
+        // Parse JSON
+        const mainResult = await mainResponse.json();
+        const usersResult = await usersResponse.json();
+
+        // Set state
+        setData(mainResult);
+        setUsers(usersResult.data);
+
+      } catch (error) {
+        // Handle any errors that occurred during fetch
         console.error('Error fetching from backend:', error);
         setError(error.message);
+      } finally {
+        // This runs whether the fetch succeeded or failed
         setLoading(false);
-      });
-  }, []); // [] = Run only once when component mounts
+      }
+    };
 
-  // ============================================================
-  // EFFECT 2: Fetch all users
-  // ============================================================
-  useEffect(() => {
-    fetch('http://localhost:5000/api/users')
-      .then((response) => response.json())
-      .then((result) => {
-        console.log('Users from backend:', result.data);
-        setUsers(result.data);
-      })
-      .catch((error) => console.error('Error:', error));
-  }, []);
+    // Call the async function
+    fetchAllData();
+  }, []); // [] = Run only once when component mounts
 
   // ============================================================
   // RENDER: Display the data
@@ -532,8 +562,7 @@ Then use it:
 ```javascript
 // ============================================================
 // FILE: src/components/HelloBackendAxios.jsx
-// PURPOSE: Same thing but with Axios
-// Axios: More powerful than Fetch, easier syntax
+// PURPOSE: Same thing but with Axios and async/await
 // ============================================================
 
 import React, { useState, useEffect } from 'react';
@@ -543,35 +572,40 @@ function HelloBackendAxios() {
   const [data, setData] = useState(null);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // ============================================================
-  // AXIOS: Simpler syntax than Fetch
+  // AXIOS with ASYNC/AWAIT: Modern and clean
   // ============================================================
   useEffect(() => {
-    // STEP 1: Make request to backend
-    // Axios automatically converts to/from JSON
-    axios.get('http://localhost:5000')
-      .then((response) => {
-        // STEP 2: Data is already parsed (no need for .json())
-        console.log('Response:', response.data);
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        // STEP 3: Handle error
-        console.error('Error:', error.message);
-        setLoading(false);
-      });
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Make requests in parallel
+        const [mainResult, usersResult] = await Promise.all([
+          axios.get('http://localhost:5000'),
+          axios.get('http://localhost:5000/api/users')
+        ]);
 
-    // STEP 4: Fetch users
-    axios.get('http://localhost:5000/api/users')
-      .then((response) => {
-        setUsers(response.data.data);
-      })
-      .catch((error) => console.error('Error:', error));
+        // Set state with the data from responses
+        setData(mainResult.data);
+        setUsers(usersResult.data.data);
+
+      } catch (err) {
+        // Handle any errors from either request
+        console.error('Error fetching data with Axios:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>⏳ Loading...</div>;
+  if (error) return <div>❌ Error: {error}</div>;
   if (!data) return <div>No data</div>;
 
   return (
@@ -695,17 +729,20 @@ Here's the complete flow from user action to seeing result:
 // ❌ BAD: No error handling
 fetch('/api/data').then(r => r.json()).then(d => setData(d));
 
-// ✅ GOOD: Proper error handling
-fetch('/api/data')
-  .then(r => {
-    if (!r.ok) throw new Error('Failed to fetch');
-    return r.json();
-  })
-  .then(d => setData(d))
-  .catch(e => {
-    console.error('Error:', e);
-    setError(e.message);
-  });
+// ✅ GOOD: Proper error handling with async/await
+const fetchData = async () => {
+  try {
+    const response = await fetch('/api/data');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    setData(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    setError(error.message);
+  }
+};
 ```
 
 ### 2. **Validate Input Data**

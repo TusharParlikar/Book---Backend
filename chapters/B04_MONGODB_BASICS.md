@@ -506,9 +506,17 @@ app.use(express.json());
 // CONNECT TO MONGODB
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/library-db';
 
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch((error) => console.error('❌ MongoDB connection error:', error));
+const connectDB = async () => {
+  try {
+    await mongoose.connect(MONGO_URI);
+    console.log('✅ Connected to MongoDB');
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 // ROUTES
 const bookRoutes = require('./routes/bookRoutes');
@@ -526,6 +534,15 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
 ```
+
+<details>
+<summary>💡 Expected Server Output</summary>
+
+```bash
+✅ Server running on port 5000
+✅ Connected to MongoDB
+```
+</details>
 
 ### Step 2: Create Book Model
 
@@ -1080,7 +1097,9 @@ function BookCatalog() {
       
       if (data.success) {
         alert('Book deleted!');
-        fetchBooks(); // Refresh list
+        await fetchBooks(); // Refresh list
+      } else {
+        alert(data.error || 'Failed to delete book');
       }
     } catch (err) {
       alert('Error deleting book');

@@ -72,6 +72,15 @@ By the end of this chapter, you will:
 npm install openai
 ```
 
+<details>
+<summary>💡 Expected Output</summary>
+
+```bash
+added 1 package, and audited 2 packages in 1s
+found 0 vulnerabilities
+```
+</details>
+
 ### Step 3: Environment Variables
 
 ```env
