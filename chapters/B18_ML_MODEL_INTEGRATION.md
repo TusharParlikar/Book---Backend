@@ -213,13 +213,13 @@ const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5000';
 // Predict sentiment
 router.post('/reviews/:productId/sentiment', auth, async (req, res) => {
   const { text } = req.body;
+  if (!text) {
+    return res.status(400).json({ message: 'Review text is required' });
+  }
 
   try {
     // Call Python ML service
-    const response = await axios.post(`${ML_SERVICE_URL}/predict/sentiment`, {
-      text
-    });
-
+    const response = await axios.post(`${ML_SERVICE_URL}/predict/sentiment`, { text });
     const { sentiment, confidence, scores } = response.data;
 
     // Save review with sentiment
@@ -229,22 +229,17 @@ router.post('/reviews/:productId/sentiment', auth, async (req, res) => {
       text,
       sentiment,
       sentimentScore: scores.positive,
-      aiGenerated: false
     });
 
-    res.json({
+    res.status(201).json({
       success: true,
       review,
-      analysis: {
-        sentiment,
-        confidence,
-        scores
-      }
+      analysis: { sentiment, confidence, scores }
     });
 
   } catch (error) {
-    console.error('ML service error:', error);
-    res.status(500).json({ message: 'Sentiment analysis failed' });
+    console.error('ML service error:', error.message);
+    res.status(500).json({ message: 'Sentiment analysis failed due to a server error.' });
   }
 });
 ```
@@ -365,36 +360,41 @@ def content_based():
 // Get personalized recommendations
 router.get('/products/recommendations', auth, async (req, res) => {
   try {
-    // Fetch user's purchase/rating history
-    const userRatings = await Rating.find({ user: req.user._id });
+    const userRatings = await Rating.find({ user: req.user._id }).lean();
 
     if (userRatings.length < 3) {
-      // Not enough data, use trending products
-      const trending = await Product.find()
-        .sort({ viewCount: -1 })
-        .limit(10);
+      const trending = await Product.find().sort({ viewCount: -1 }).limit(10).lean();
       return res.json({ recommendations: trending, method: 'trending' });
     }
 
-    // Call ML service for collaborative filtering
     const response = await axios.post(`${ML_SERVICE_URL}/recommend/collaborative`, {
       user_id: req.user._id.toString(),
       n: 10
     });
 
-    // Fetch product details
     const productIds = response.data.recommendations.map(r => r.product_id);
-    const products = await Product.find({ _id: { $in: productIds } });
+    const products = await Product.find({ _id: { $in: productIds } }).lean();
+
+    // Add similarity score to product data
+    const recommendations = products.map(p => {
+      const recommendationData = response.data.recommendations.find(r => r.product_id.toString() === p._id.toString());
+      return { ...p, similarity_score: recommendationData?.similarity_score };
+    });
 
     res.json({
-      recommendations: products,
-      method: 'collaborative',
-      confidence: response.data.recommendations[0]?.similarity_score
+      recommendations,
+      method: 'collaborative'
     });
 
   } catch (error) {
-    console.error('Recommendation error:', error);
-    res.status(500).json({ message: 'Failed to get recommendations' });
+    console.error('Recommendation error:', error.message);
+    // Fallback to trending products on error
+    try {
+      const trending = await Product.find().sort({ viewCount: -1 }).limit(10).lean();
+      res.status(500).json({ recommendations: trending, method: 'trending_fallback', error: 'Could not fetch personalized recommendations.' });
+    } catch (fallbackError) {
+      res.status(500).json({ message: 'Failed to get any recommendations.' });
+    }
   }
 });
 ```

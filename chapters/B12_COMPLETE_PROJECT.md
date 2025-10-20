@@ -88,11 +88,16 @@ const getPosts = async (req, res) => {
 
 const likePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    if (!post.likes.includes(req.user.userId)) {
-      post.likes.push(req.user.userId);
-      await post.save();
+    const post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { likes: req.user.userId } }, // Use $addToSet to prevent duplicates
+      { new: true }
+    );
+
+    if (!post) {
+      return res.status(404).json({ success: false, message: 'Post not found' });
     }
+    
     res.json({ success: true, data: post });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -101,9 +106,16 @@ const likePost = async (req, res) => {
 
 const unlikePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    post.likes = post.likes.filter(id => !id.equals(req.user.userId));
-    await post.save();
+    const post = await Post.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { likes: req.user.userId } },
+      { new: true }
+    );
+
+    if (!post) {
+      return res.status(404).json({ success: false, message: 'Post not found' });
+    }
+
     res.json({ success: true, data: post });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -175,17 +187,30 @@ const getUserProfile = async (req, res) => {
 
 const followUser = async (req, res) => {
   try {
-    const userToFollow = await User.findById(req.params.userId);
-    const currentUser = await User.findById(req.user.userId);
-    
-    if (!currentUser.following.includes(userToFollow._id)) {
-      currentUser.following.push(userToFollow._id);
-      userToFollow.followers.push(currentUser._id);
-      await currentUser.save();
-      await userToFollow.save();
+    // Prevent user from following themselves
+    if (req.user.userId === req.params.userId) {
+      return res.status(400).json({ success: false, message: "You can't follow yourself" });
+    }
+
+    // Use Promise.all to run updates in parallel
+    const [currentUser, userToFollow] = await Promise.all([
+      User.findByIdAndUpdate(
+        req.user.userId,
+        { $addToSet: { following: req.params.userId } },
+        { new: true }
+      ),
+      User.findByIdAndUpdate(
+        req.params.userId,
+        { $addToSet: { followers: req.user.userId } },
+        { new: true }
+      )
+    ]);
+
+    if (!userToFollow) {
+      return res.status(404).json({ success: false, message: 'User to follow not found' });
     }
     
-    res.json({ success: true, message: 'Followed' });
+    res.json({ success: true, message: `Now following ${userToFollow.name}` });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -193,16 +218,24 @@ const followUser = async (req, res) => {
 
 const unfollowUser = async (req, res) => {
   try {
-    const userToUnfollow = await User.findById(req.params.userId);
-    const currentUser = await User.findById(req.user.userId);
+    const [currentUser, userToUnfollow] = await Promise.all([
+      User.findByIdAndUpdate(
+        req.user.userId,
+        { $pull: { following: req.params.userId } },
+        { new: true }
+      ),
+      User.findByIdAndUpdate(
+        req.params.userId,
+        { $pull: { followers: req.user.userId } },
+        { new: true }
+      )
+    ]);
+
+    if (!userToUnfollow) {
+      return res.status(404).json({ success: false, message: 'User to unfollow not found' });
+    }
     
-    currentUser.following = currentUser.following.filter(id => !id.equals(userToUnfollow._id));
-    userToUnfollow.followers = userToUnfollow.followers.filter(id => !id.equals(currentUser._id));
-    
-    await currentUser.save();
-    await userToUnfollow.save();
-    
-    res.json({ success: true, message: 'Unfollowed' });
+    res.json({ success: true, message: `Unfollowed ${userToUnfollow.name}` });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

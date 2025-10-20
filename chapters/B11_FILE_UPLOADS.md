@@ -75,7 +75,8 @@ const uploadToCloudinary = async (filePath) => {
       publicId: result.public_id
     };
   } catch (error) {
-    throw new Error('Cloudinary upload failed');
+    console.error('Cloudinary upload error:', error);
+    throw new Error('Error uploading to Cloudinary');
   }
 };
 
@@ -98,8 +99,12 @@ const uploadImage = async (req, res) => {
     // UPLOAD to Cloudinary
     const { url, publicId } = await uploadToCloudinary(req.file.path);
 
-    // DELETE temporary file
-    fs.unlinkSync(req.file.path);
+    // DELETE temporary file asynchronously
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error('Failed to delete temporary file:', req.file.path, err);
+      }
+    });
 
     res.json({
       success: true,
@@ -111,7 +116,13 @@ const uploadImage = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    // If file exists, try to delete it on error
+    if (req.file && req.file.path) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error('Failed to delete temporary file on error:', req.file.path, err);
+      });
+    }
+    res.status(500).json({ success: false, error: 'File upload failed' });
   }
 };
 

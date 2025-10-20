@@ -161,11 +161,54 @@ Return top 3
 - [ ] Search bar
 - [ ] Pagination controls
 
-**React Routing:**
-- `/` - Home (all posts)
-- `/post/:slug` - Single post view
-- `/tag/:tag` - Filter by tag
-- `/create` - New post form
+**React Integration Example (Post List):**
+```jsx
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+function PostList() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/posts/published');
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
+        }
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (loading) return <div>Loading posts...</div>;
+
+  return (
+    <div>
+      <h1>Blog</h1>
+      {posts.map(post => (
+        <article key={post.id}>
+          <h2>
+            <Link to={`/post/${post.slug}`}>{post.title}</Link>
+          </h2>
+          <p>{post.excerpt}</p>
+          <small>By {post.author} on {new Date(post.createdAt).toLocaleDateString()}</small>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+export default PostList;
+```
 
 ---
 

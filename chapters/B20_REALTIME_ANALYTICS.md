@@ -113,23 +113,13 @@ router.post('/orders', auth, async (req, res) => {
 
   // Update real-time metrics
   const todaySales = await Order.aggregate([
-    {
-      $match: {
-        createdAt: { $gte: new Date().setHours(0, 0, 0, 0) }
-      }
-    },
-    {
-      $group: {
-        _id: null,
-        totalRevenue: { $sum: '$totalAmount' },
-        orderCount: { $sum: 1 }
-      }
-    }
+    { $match: { createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) } } },
+    { $group: { _id: null, totalRevenue: { $sum: '$totalAmount' }, orderCount: { $sum: 1 } } }
   ]);
 
-  io.to('admin-room').emit('sales-update', todaySales[0]);
+  io.to('admin-room').emit('sales-update', todaySales[0] || { totalRevenue: 0, orderCount: 0 });
 
-  res.json({ success: true, order });
+  res.status(201).json({ success: true, order });
 });
 ```
 
@@ -183,24 +173,32 @@ io.on('connection', async (socket) => {
 
 ```javascript
 async function getRealTimeMetrics() {
-  const today = new Date().setHours(0, 0, 0, 0);
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-  const [orders, revenue, activeUsers, newUsers] = await Promise.all([
-    Order.countDocuments({ createdAt: { $gte: today } }),
-    Order.aggregate([
-      { $match: { createdAt: { $gte: today }, status: 'paid' } },
-      { $group: { _id: null, total: { $sum: '$totalAmount' } } }
-    ]),
-    Session.countDocuments({ lastActive: { $gte: new Date(Date.now() - 15 * 60 * 1000) } }),
-    User.countDocuments({ createdAt: { $gte: today } })
-  ]);
+    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
-  return {
-    todayOrders: orders,
-    todayRevenue: revenue[0]?.total || 0,
-    activeUsers,
-    newUsers
-  };
+    const [orders, revenueResult, activeUsers, newUsers] = await Promise.all([
+      Order.countDocuments({ createdAt: { $gte: today } }),
+      Order.aggregate([
+        { $match: { createdAt: { $gte: today }, status: 'paid' } },
+        { $group: { _id: null, total: { $sum: '$totalAmount' } } }
+      ]),
+      Session.countDocuments({ lastActive: { $gte: fifteenMinutesAgo } }),
+      User.countDocuments({ createdAt: { $gte: today } })
+    ]);
+
+    return {
+      todayOrders: orders,
+      todayRevenue: revenueResult[0]?.total || 0,
+      activeUsers,
+      newUsers
+    };
+  } catch (error) {
+    console.error("Error fetching real-time metrics:", error);
+    return { todayOrders: 0, todayRevenue: 0, activeUsers: 0, newUsers: 0 };
+  }
 }
 
 // Update metrics every 10 seconds
@@ -426,18 +424,20 @@ const pidusage = require('pidusage');
 
 // Emit system metrics every 5 seconds
 setInterval(async () => {
-  const stats = await pidusage(process.pid);
-
-  const metrics = {
-    cpu: stats.cpu.toFixed(2),
-    memory: (stats.memory / 1024 / 1024).toFixed(2), // MB
-    totalMemory: (os.totalmem() / 1024 / 1024 / 1024).toFixed(2), // GB
-    freeMemory: (os.freemem() / 1024 / 1024 / 1024).toFixed(2),
-    uptime: process.uptime(),
-    connections: io.engine.clientsCount
-  };
-
-  io.to('admin-room').emit('system-metrics', metrics);
+  try {
+    const stats = await pidusage(process.pid);
+    const metrics = {
+      cpu: stats.cpu.toFixed(2),
+      memory: (stats.memory / 1024 / 1024).toFixed(2), // MB
+      totalMemory: (os.totalmem() / 1024 / 1024 / 1024).toFixed(2), // GB
+      freeMemory: (os.freemem() / 1024 / 1024 / 1024).toFixed(2), // GB
+      uptime: process.uptime(),
+      connections: io.engine.clientsCount
+    };
+    io.to('admin-room').emit('system-metrics', metrics);
+  } catch (error) {
+    console.error('Failed to get pidusage:', error);
+  }
 }, 5000);
 ```
 
@@ -474,44 +474,35 @@ function LiveDashboard() {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Connect to Socket.io
-    const newSocket = io('http://localhost:5000', {
-      auth: {
-        token: localStorage.getItem('token')
-      }
-    });
+  const newSocket = io('http://localhost:5000', {
+    auth: { token: localStorage.getItem('token') },
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+  });
 
-    newSocket.on('connect', () => {
-      console.log('Connected to server');
-    });
+  setSocket(newSocket);
 
-    newSocket.on('initial-data', (data) => {
-      setMetrics(data);
-    });
+  newSocket.on('connect', () => console.log('Connected to server'));
+  newSocket.on('disconnect', () => console.log('Disconnected from server'));
 
-    newSocket.on('metrics-update', (data) => {
-      setMetrics(data);
-    });
+  newSocket.on('initial-data', setMetrics);
+  newSocket.on('metrics-update', setMetrics);
 
-    newSocket.on('new-order', (order) => {
-      setRecentOrders(prev => [order, ...prev].slice(0, 10));
-      
-      // Show toast notification
-      toast.success(`New order: ₹${order.totalAmount}`);
-    });
+  newSocket.on('new-order', (order) => {
+    setRecentOrders(prev => [order, ...prev].slice(0, 10));
+    toast.success(`New order: ₹${order.totalAmount}`);
+  });
 
-    newSocket.on('sales-update', (data) => {
-      setMetrics(prev => ({
-        ...prev,
-        todayRevenue: data.totalRevenue,
-        todayOrders: data.orderCount
-      }));
-    });
+  newSocket.on('sales-update', (data) => {
+    setMetrics(prev => ({
+      ...prev,
+      todayRevenue: data.totalRevenue,
+      todayOrders: data.orderCount
+    }));
+  });
 
-    setSocket(newSocket);
-
-    return () => newSocket.close();
-  }, []);
+  return () => newSocket.close();
+}, []);
 
   if (!metrics) return <div>Loading...</div>;
 

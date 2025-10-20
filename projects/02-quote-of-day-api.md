@@ -105,17 +105,60 @@ Get today's date → Convert to number → Use as index (with modulo)
 **Todo:**
 - [ ] Create React app
 - [ ] Create `QuoteDisplay.jsx` component
-- [ ] Fetch random quote on button click
+- [ ] Fetch random quote on button click using `async/await`
 - [ ] Display quote text and author
 - [ ] Add category filter dropdown
 - [ ] Add "Get New Quote" button
 - [ ] Add loading and error states
 
-**React Features:**
-- useState for quote data
-- useEffect for initial fetch
-- Button to get new random quote
-- Dropdown to filter by category
+**React Integration Example:**
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function QuoteDisplay() {
+  const [quote, setQuote] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRandomQuote = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/quotes/random');
+      if (!response.ok) {
+        throw new Error('Failed to fetch quote');
+      }
+      const data = await response.json();
+      setQuote(data);
+    } catch (error) {
+      console.error(error);
+      setQuote({ text: 'Could not fetch a quote. Please try again.', author: 'System' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRandomQuote();
+  }, []);
+
+  return (
+    <div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <blockquote>
+          <p>"{quote.text}"</p>
+          <footer>- {quote.author}</footer>
+        </blockquote>
+      )}
+      <button onClick={fetchRandomQuote} disabled={loading}>
+        Get New Quote
+      </button>
+    </div>
+  );
+}
+
+export default QuoteDisplay;
+```
 
 ---
 

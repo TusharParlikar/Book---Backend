@@ -138,7 +138,17 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/app');
+const connectDB = async () => {
+  try {
+    await mongoose.connect('mongodb://localhost:27017/app');
+    console.log('✅ MongoDB connected');
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error.message);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/todos', todoRoutes);
@@ -150,6 +160,7 @@ app.listen(5000, () => console.log('✅ Server on 5000'));
 <summary>💡 Expected Server Output</summary>
 
 ```bash
+✅ MongoDB connected
 ✅ Server on 5000
 ```
 </details>
@@ -174,41 +185,53 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      // Verify token
-      axios.get('http://localhost:5000/api/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => setUser(res.data.data))
-        .catch(() => {
+    const verifyToken = async () => {
+      if (token) {
+        try {
+          const res = await axios.get('http://localhost:5000/api/auth/me', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUser(res.data.data);
+        } catch (error) {
           setToken(null);
           localStorage.removeItem('token');
-        })
-        .finally(() => setLoading(false));
-    } else {
+        }
+      }
       setLoading(false);
-    }
+    };
+
+    verifyToken();
   }, [token]);
 
   const login = async (email, password) => {
-    const res = await axios.post('http://localhost:5000/api/auth/login', {
-      email,
-      password
-    });
-    const { token, ...userData } = res.data.data;
-    setToken(token);
-    setUser(userData);
-    localStorage.setItem('token', token);
-    return res.data;
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/login', {
+        email,
+        password
+      });
+      const { token, ...userData } = res.data.data;
+      setToken(token);
+      setUser(userData);
+      localStorage.setItem('token', token);
+      return res.data;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error; // Re-throw to be caught by the component
+    }
   };
 
   const register = async (name, email, password) => {
-    const res = await axios.post('http://localhost:5000/api/auth/register', {
-      name,
-      email,
-      password
-    });
-    return res.data;
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/register', {
+        name,
+        email,
+        password
+      });
+      return res.data;
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw error; // Re-throw to be caught by the component
+    }
   };
 
   const logout = () => {
@@ -220,7 +243,7 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
       {children}
-    </AuthContext.Provider>
+    </Auth.Provider>
   );
 }
 

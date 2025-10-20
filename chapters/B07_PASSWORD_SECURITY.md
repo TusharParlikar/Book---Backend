@@ -101,8 +101,12 @@ userSchema.pre('save', async function(next) {
 
 // METHOD: Compare passwords (for login)
 userSchema.methods.comparePassword = async function(passwordToCheck) {
-  // bcrypt.compare returns true/false
-  return await bcrypt.compare(passwordToCheck, this.password);
+  try {
+    // bcrypt.compare returns true/false
+    return await bcrypt.compare(passwordToCheck, this.password);
+  } catch (error) {
+    throw error;
+  }
 };
 
 module.exports = mongoose.model('User', userSchema);

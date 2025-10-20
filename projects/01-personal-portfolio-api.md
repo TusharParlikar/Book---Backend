@@ -109,23 +109,79 @@ By the end of this project, you will have:
 **Todo:**
 - [ ] Create React app (`npx create-react-app portfolio-frontend`)
 - [ ] Create component `Portfolio.jsx`
-- [ ] Use `fetch()` to get data from API
+- [ ] Use `async/await` with `fetch()` to get data from API
 - [ ] Display personal info (name, title, bio)
 - [ ] Map through skills and display them
 - [ ] Map through projects and display them
 - [ ] Add loading state
 - [ ] Add error handling
 
-**Hint:** Use `useEffect` to fetch data when component mounts. Use `useState` for data storage.
-
 **React Integration Example Structure:**
-```
-Component mounts 
-  → fetch('/api/portfolio') 
-  → Display loading
-  → Data arrives
-  → Update state
-  → Render data
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function Portfolio() {
+  const [portfolioData, setPortfolioData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/portfolio');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setPortfolioData(data);
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPortfolio();
+  }, []);
+
+  if (loading) return <div>Loading portfolio...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!portfolioData) return <div>No data found.</div>;
+
+  const { personal, skills, projects } = portfolioData;
+
+  return (
+    <div>
+      <header>
+        <h1>{personal.name}</h1>
+        <p>{personal.title}</p>
+        <p>{personal.bio}</p>
+      </header>
+
+      <section>
+        <h2>Skills</h2>
+        <ul>
+          {skills.map(skill => (
+            <li key={skill.name}>{skill.name} ({skill.level})</li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Projects</h2>
+        {projects.map(project => (
+          <article key={project.title}>
+            <h3>{project.title}</h3>
+            <p>{project.description}</p>
+            <p><strong>Technologies:</strong> {project.technologies.join(', ')}</p>
+          </article>
+        ))}
+      </section>
+    </div>
+  );
+}
+
+export default Portfolio;
 ```
 
 ---

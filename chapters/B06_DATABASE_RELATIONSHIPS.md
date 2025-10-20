@@ -123,7 +123,7 @@ const createPost = async (req, res) => {
     const { title, content, authorId, tags } = req.body;
     
     // Create post
-    const post = await Post.create({
+    let post = await Post.create({
       title,
       content,
       author: authorId,
@@ -131,7 +131,7 @@ const createPost = async (req, res) => {
     });
     
     // Populate author and tags
-    await post.populate(['author', 'tags']);
+    post = await post.populate(['author', 'tags']);
     
     res.status(201).json({ success: true, data: post });
   } catch (error) {

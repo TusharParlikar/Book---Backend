@@ -161,11 +161,74 @@ const reserved = ['admin', 'api', 'stats', 'dashboard', 'login'];
 - [ ] Display analytics for each URL
 - [ ] Delete functionality
 
-**Features:**
-- URL preview before shortening
-- Copy button with toast notification
-- Analytics dashboard
-- URL management table
+**React Integration Example:**
+```jsx
+import React, { useState } from 'react';
+
+function UrlShortener() {
+  const [originalUrl, setOriginalUrl] = useState('');
+  const [shortUrl, setShortUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setShortUrl('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/shorten', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ originalUrl }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to shorten URL');
+      }
+
+      const data = await response.json();
+      setShortUrl(data.shortUrl);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="url"
+          value={originalUrl}
+          onChange={(e) => setOriginalUrl(e.target.value)}
+          placeholder="Enter a long URL"
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Shortening...' : 'Shorten'}
+        </button>
+      </form>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {shortUrl && (
+        <div>
+          <p>Short URL: <a href={shortUrl} target="_blank" rel="noopener noreferrer">{shortUrl}</a></p>
+          <button onClick={() => navigator.clipboard.writeText(shortUrl)}>
+            Copy
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default UrlShortener;
+```
 
 ---
 

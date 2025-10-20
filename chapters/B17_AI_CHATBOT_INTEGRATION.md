@@ -200,8 +200,8 @@ const [messages, setMessages] = useState([]);
 const [currentReply, setCurrentReply] = useState('');
 
 const sendMessage = async (userMessage) => {
-  // Add user message
   setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+  setCurrentReply('...'); // Show loading indicator
 
   try {
     const response = await fetch('/api/chat/stream', {
@@ -209,6 +209,10 @@ const sendMessage = async (userMessage) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: userMessage })
     });
+
+    if (!response.ok || !response.body) {
+      throw new Error('Failed to get stream response.');
+    }
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
@@ -218,27 +222,34 @@ const sendMessage = async (userMessage) => {
       const { done, value } = await reader.read();
       if (done) break;
 
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split('\n\n');
 
       for (const line of lines) {
         if (line.startsWith('data: ')) {
           const data = line.slice(6);
           
-          if (data === '[DONE]') {
-            // Streaming complete
+          if (data.trim() === '[DONE]') {
             setMessages(prev => [...prev, { role: 'assistant', content: aiReply }]);
             setCurrentReply('');
-          } else {
+            return; // Exit loop
+          }
+          
+          try {
             const parsed = JSON.parse(data);
-            aiReply += parsed.content;
-            setCurrentReply(aiReply); // Update in real-time
+            if (parsed.content) {
+              aiReply += parsed.content;
+              setCurrentReply(aiReply);
+            }
+          } catch (e) {
+            // Ignore JSON parsing errors for incomplete chunks
           }
         }
       }
     }
   } catch (error) {
     console.error('Stream error:', error);
+    setCurrentReply('Error: Could not get response.');
   }
 };
 ```
@@ -489,25 +500,30 @@ const functions = [
 ### Implement Function Handlers
 
 ```javascript
-async function executeFunction(functionName, args) {
-  switch (functionName) {
-    case 'get_weather':
-      // Call weather API
-      const weather = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${args.location}&appid=${process.env.WEATHER_API_KEY}`
-      );
-      const data = await weather.json();
-      return `Weather in ${args.location}: ${data.weather[0].description}, ${Math.round(data.main.temp - 273.15)}°C`;
+async function executeFunction(functionName, args, userId) {
+  try {
+    switch (functionName) {
+      case 'get_weather':
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?q=${args.location}&appid=${process.env.WEATHER_API_KEY}&units=metric`
+        );
+        if (!response.ok) throw new Error('Weather API request failed');
+        const data = await response.json();
+        return `Weather in ${args.location}: ${data.weather[0].description}, ${data.main.temp}°C`;
 
-    case 'get_user_orders':
-      // Fetch from database
-      const orders = await Order.find({ user: req.user._id })
-        .limit(args.limit || 5)
-        .sort({ createdAt: -1 });
-      return orders.map(o => `Order #${o._id}: ${o.status}, ₹${o.totalAmount}`).join('\n');
+      case 'get_user_orders':
+        const orders = await Order.find({ user: userId })
+          .limit(args.limit || 5)
+          .sort({ createdAt: -1 });
+        if (orders.length === 0) return 'No recent orders found.';
+        return orders.map(o => `Order #${o._id}: ${o.status}, ₹${o.totalAmount}`).join('\n');
 
-    default:
-      return 'Function not found';
+      default:
+        return 'Function not found';
+    }
+  } catch (error) {
+    console.error(`Error executing function ${functionName}:`, error);
+    return `Error getting data for ${functionName}.`;
   }
 }
 ```
@@ -518,50 +534,57 @@ async function executeFunction(functionName, args) {
 router.post('/chat/functions', auth, async (req, res) => {
   const { message } = req.body;
 
-  let messages = [
-    { role: 'system', content: 'You are a helpful assistant.' },
-    { role: 'user', content: message }
-  ];
+  try {
+    let messages = [
+      { role: 'system', content: 'You are a helpful assistant.' },
+      { role: 'user', content: message }
+    ];
 
-  // First API call with functions
-  let completion = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages,
-    functions,
-    function_call: 'auto'
-  });
-
-  let responseMessage = completion.choices[0].message;
-
-  // If AI wants to call a function
-  if (responseMessage.function_call) {
-    const functionName = responseMessage.function_call.name;
-    const functionArgs = JSON.parse(responseMessage.function_call.arguments);
-
-    // Execute the function
-    const functionResult = await executeFunction(functionName, functionArgs);
-
-    // Add function result to conversation
-    messages.push(responseMessage); // AI's function call
-    messages.push({
-      role: 'function',
-      name: functionName,
-      content: functionResult
-    });
-
-    // Second API call with function result
-    completion = await openai.chat.completions.create({
+    // First API call
+    let completion = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
-      messages
+      messages,
+      functions,
+      function_call: 'auto'
     });
 
-    responseMessage = completion.choices[0].message;
-  }
+    let responseMessage = completion.choices[0].message;
 
-  res.json({
-    success: true,
-    reply: responseMessage.content
-  });
+    // Loop to handle multiple function calls if necessary
+    while (responseMessage.function_call) {
+      const functionName = responseMessage.function_call.name;
+      const functionArgs = JSON.parse(responseMessage.function_call.arguments);
+
+      // Execute the function
+      const functionResult = await executeFunction(functionName, functionArgs, req.user._id);
+
+      // Add results to conversation history
+      messages.push(responseMessage); // AI's decision to call the function
+      messages.push({
+        role: 'function',
+        name: functionName,
+        content: functionResult
+      });
+
+      // Second API call with function result
+      completion = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages,
+        functions,
+        function_call: 'auto'
+      });
+
+      responseMessage = completion.choices[0].message;
+    }
+
+    res.json({
+      success: true,
+      reply: responseMessage.content
+    });
+  } catch (error) {
+    console.error('Function calling error:', error);
+    res.status(500).json({ success: false, message: 'An error occurred.' });
+  }
 });
 ```
 

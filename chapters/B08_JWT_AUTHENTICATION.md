@@ -133,7 +133,7 @@ module.exports = { login };
 
 const { verifyToken } = require('../config/jwt');
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   try {
     // GET TOKEN from headers
     const authHeader = req.headers.authorization;

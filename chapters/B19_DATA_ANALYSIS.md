@@ -68,11 +68,14 @@ import os
 client = MongoClient(os.getenv('MONGODB_URI', 'mongodb://localhost:27017/'))
 db = client['your_database']
 
-def get_collection_as_dataframe(collection_name, query={}, projection=None):
+def get_collection_as_dataframe(collection_name, query={}, projection=None, no_id=True):
     """Fetch MongoDB collection as Pandas DataFrame"""
     collection = db[collection_name]
     cursor = collection.find(query, projection)
-    return pd.DataFrame(list(cursor))
+    df = pd.DataFrame(list(cursor))
+    if no_id and '_id' in df.columns:
+        df.drop('_id', axis=1, inplace=True)
+    return df
 ```
 
 ---
@@ -91,35 +94,35 @@ app = Flask(__name__)
 
 @app.route('/analytics/sales/summary', methods=['GET'])
 def sales_summary():
-    # Get date range from query params
-    days = int(request.args.get('days', 30))
-    start_date = datetime.now() - timedelta(days=days)
+    try:
+        days = int(request.args.get('days', 30))
+        start_date = datetime.now() - timedelta(days=days)
 
-    # Fetch orders from MongoDB
-    orders_df = get_collection_as_dataframe('orders', {
-        'createdAt': {'$gte': start_date},
-        'status': 'paid'
-    })
+        orders_df = get_collection_as_dataframe('orders', {
+            'createdAt': {'$gte': start_date},
+            'status': 'paid'
+        })
 
-    if orders_df.empty:
-        return jsonify({'message': 'No data found'}), 404
+        if orders_df.empty:
+            return jsonify({'message': 'No sales data found for the period'}), 404
 
-    # Calculate metrics
-    total_revenue = orders_df['totalAmount'].sum()
-    total_orders = len(orders_df)
-    average_order_value = orders_df['totalAmount'].mean()
-    
-    # Daily revenue
-    orders_df['date'] = pd.to_datetime(orders_df['createdAt']).dt.date
-    daily_revenue = orders_df.groupby('date')['totalAmount'].sum().to_dict()
+        total_revenue = orders_df['totalAmount'].sum()
+        total_orders = len(orders_df)
+        average_order_value = orders_df['totalAmount'].mean()
+        
+        orders_df['date'] = pd.to_datetime(orders_df['createdAt']).dt.date
+        daily_revenue = orders_df.groupby('date')['totalAmount'].sum()
+        daily_revenue.index = daily_revenue.index.astype(str)
 
-    return jsonify({
-        'period': f'Last {days} days',
-        'total_revenue': float(total_revenue),
-        'total_orders': total_orders,
-        'average_order_value': float(average_order_value),
-        'daily_revenue': {str(k): float(v) for k, v in daily_revenue.items()}
-    })
+        return jsonify({
+            'period': f'Last {days} days',
+            'total_revenue': float(total_revenue),
+            'total_orders': int(total_orders),
+            'average_order_value': float(average_order_value),
+            'daily_revenue': daily_revenue.to_dict()
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 ```
 
 ### Product Performance

@@ -449,7 +449,7 @@ function CheckoutPage() {
 const handlePayment = async () => {
   try {
     // Step 1: Create order on backend
-    const response = await fetch('/api/orders/create', {
+    const orderRes = await fetch('/api/orders/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -457,51 +457,59 @@ const handlePayment = async () => {
       }
     });
 
-    const data = await response.json();
+    if (!orderRes.ok) {
+      throw new Error('Failed to create order');
+    }
+    const orderData = await orderRes.json();
 
     // Step 2: Configure Razorpay options
     const options = {
-      key: data.keyId,
-      amount: data.amount,
-      currency: data.currency,
+      key: orderData.keyId,
+      amount: orderData.amount,
+      currency: orderData.currency,
       name: 'Your Store Name',
-      description: 'Purchase Products',
-      order_id: data.razorpayOrderId,
+      description: 'Product Purchase',
+      order_id: orderData.razorpayOrderId,
       
-      // Callback on successful payment
       handler: async function (response) {
-        // Step 3: Verify payment on backend
-        const verifyResponse = await fetch('/api/orders/verify', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            razorpayOrderId: response.razorpay_order_id,
-            razorpayPaymentId: response.razorpay_payment_id,
-            razorpaySignature: response.razorpay_signature
-          })
-        });
+        try {
+          // Step 3: Verify payment on backend
+          const verifyRes = await fetch('/api/orders/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              razorpayOrderId: response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature
+            })
+          });
 
-        const verifyData = await verifyResponse.json();
+          if (!verifyRes.ok) {
+            throw new Error('Payment verification failed');
+          }
+          const verifyData = await verifyRes.json();
 
-        if (verifyData.success) {
-          alert('Payment successful!');
-          window.location.href = '/order-success';
-        } else {
-          alert('Payment verification failed');
+          if (verifyData.success) {
+            alert('Payment successful!');
+            window.location.href = '/order-success';
+          } else {
+            alert(verifyData.message || 'Payment verification failed');
+          }
+        } catch (error) {
+          console.error('Verification error:', error);
+          alert('An error occurred during payment verification.');
         }
       },
 
-      // Prefill user details
       prefill: {
         name: user.name,
         email: user.email,
         contact: user.phone
       },
 
-      // Theme customization
       theme: {
         color: '#3399cc'
       }

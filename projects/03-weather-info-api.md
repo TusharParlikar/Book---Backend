@@ -120,7 +120,7 @@ https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=m
 ### Step 7: React Frontend
 **Todo:**
 - [ ] Create search bar for city input
-- [ ] Fetch weather on search
+- [ ] Fetch weather on search using `async/await`
 - [ ] Display:
   - City name and country
   - Weather icon
@@ -131,9 +131,72 @@ https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=m
 - [ ] Show error messages nicely
 - [ ] Save recent searches
 
-**Hint:** OpenWeatherMap provides icon codes. Use them:
-```
-http://openweathermap.org/img/wn/{icon}@2x.png
+**React Integration Example:**
+```jsx
+import React, { useState } from 'react';
+
+function WeatherSearch() {
+  const [city, setCity] = useState('');
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!city) return;
+
+    setLoading(true);
+    setError('');
+    setWeather(null);
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/weather/${city}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'City not found');
+      }
+      const data = await response.json();
+      setWeather(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Enter city name"
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Searching...' : 'Search'}
+        </button>
+      </form>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {weather && (
+        <div>
+          <h2>{weather.city}, {weather.country}</h2>
+          <img 
+            src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`} 
+            alt={weather.description} 
+          />
+          <p>Temperature: {weather.temperature}°C</p>
+          <p>Feels like: {weather.feels_like}°C</p>
+          <p>Description: {weather.description}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default WeatherSearch;
 ```
 
 ---

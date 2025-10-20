@@ -134,12 +134,104 @@ result = todos.slice(startIndex, endIndex)
 - [ ] Filter: All / Active / Completed
 - [ ] Show count of pending todos
 
-**React Features:**
-- Form submission
-- Optimistic UI updates
-- Conditional rendering
-- Array mapping
-- Filter functionality
+**React Integration Example:**
+```jsx
+import React, { useState, useEffect } from 'react';
+
+const API_URL = 'http://localhost:5000/api/todos';
+
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setTodos(data);
+      } catch (error) {
+        console.error('Failed to fetch todos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTodos();
+  }, []);
+
+  const addTodo = async (e) => {
+    e.preventDefault();
+    if (!newTodo.trim()) return;
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newTodo }),
+      });
+      const addedTodo = await response.json();
+      setTodos([...todos, addedTodo]);
+      setNewTodo('');
+    } catch (error) {
+      console.error('Failed to add todo:', error);
+    }
+  };
+
+  const toggleComplete = async (id) => {
+    try {
+      const response = await fetch(`${API_URL}/${id}/toggle`, { method: 'PATCH' });
+      const updatedTodo = await response.json();
+      setTodos(todos.map(todo => (todo.id === id ? updatedTodo : todo)));
+    } catch (error) {
+      console.error('Failed to toggle todo:', error);
+    }
+  };
+
+  const deleteTodo = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this todo?')) return;
+    
+    try {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      setTodos(todos.filter(todo => todo.id !== id));
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <h1>Todo List</h1>
+      <form onSubmit={addTodo}>
+        <input
+          type="text"
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+          placeholder="Add a new todo"
+        />
+        <button type="submit">Add</button>
+      </form>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id} style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+            {todo.title}
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleComplete(todo.id)}
+            />
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default TodoApp;
+```
 
 ---
 

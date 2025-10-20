@@ -215,7 +215,11 @@ userSchema.pre('save', async function(next) {
 
 // METHOD: Compare passwords
 userSchema.methods.comparePassword = async function(password) {
-  return await bcrypt.compare(password, this.password);
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    throw error;
+  }
 };
 
 // VIRTUAL: Full info (not stored in DB)
