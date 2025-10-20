@@ -131,8 +131,7 @@ const createPost = async (req, res) => {
     });
     
     // Populate author and tags
-    await post.populate('author');
-    await post.populate('tags');
+    await post.populate(['author', 'tags']);
     
     res.status(201).json({ success: true, data: post });
   } catch (error) {
